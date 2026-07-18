@@ -1,0 +1,23 @@
+name: Validate retrieval evidence
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Preflight qrels and run files
+        uses: Madhvansh/Neural-E-Commerce-Search@v0.3.0
+        with:
+          qrels: evaluation/sample.qrels
+          run: evaluation/sample.run
+          expected-task: task1_ranking
