@@ -1,4 +1,4 @@
-name: Validate retrieval evidence
+name: Validate retrieval evidence (v0.3.1)
 
 on:
   push:
@@ -10,13 +10,28 @@ permissions:
   contents: read
 
 jobs:
-  validate:
+  # Recommended style: pin the action to the immutable release commit.
+  validate-pinned-sha:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Preflight qrels and run files
-        uses: Madhvansh/Neural-E-Commerce-Search@v0.3.0
+      - name: Preflight qrels and run files (immutable SHA pin)
+        uses: Madhvansh/Neural-E-Commerce-Search@6fefdad10b60e71eedfcedee1491d6e043ebe670 # v0.3.1
+        with:
+          qrels: evaluation/sample.qrels
+          run: evaluation/sample.run
+          expected-task: task1_ranking
+
+  # Readable style: pin the action to the release tag. Verified separately so
+  # both invocation paths are exercised on every push.
+  validate-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Preflight qrels and run files (readable tag)
+        uses: Madhvansh/Neural-E-Commerce-Search@v0.3.1 # readable tag
         with:
           qrels: evaluation/sample.qrels
           run: evaluation/sample.run
